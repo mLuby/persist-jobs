@@ -1,15 +1,16 @@
-[![Build Status](https://travis-ci.org/mLuby/jobs.svg?branch=master)](https://travis-ci.org/mLuby/jobs)[![Coverage Status](https://coveralls.io/repos/github/mLuby/jobs/badge.svg?branch=master)](https://coveralls.io/github/mLuby/jobs?branch=master)
-# Jobs
+[![Build Status](https://travis-ci.org/mLuby/persist-jobs.svg?branch=master)](https://travis-ci.org/mLuby/persist-jobs)[![Coverage Status](https://coveralls.io/repos/github/mLuby/persist-jobs/badge.svg?branch=master)](https://coveralls.io/github/mLuby/persist-jobs?branch=master)
+# persist-jobs
 Persistent Job Scheduler for Node (SQL)
 
 # Goal
 - simple to use and configure.
 - persistent/restart/crash-tolerant: after scheduling, schedule process can die and whenever it's restarted it'll run whatever jobs are necessary.
 - not a footgun: throw helpful errors if dev tries to do something like schedule jobs that aren't registered.
+- zero dependences.
 
 # How to use
 ```js
-const Jobs = require("jobs")({sql: executeSqlPromise})
+const Jobs = require("persist-jobs")({sql: executeSqlPromise})
 Jobs.start({intervalMs: 1000})
 
 function someFunc (a, b) { console.log("someFunc!", a, b) }
@@ -36,11 +37,11 @@ CREATE TABLE Jobs (
 ```
 2. Install and use as per the example above.
 ```sh
-npm install --save jobs
+npm install --save persist-jobs
 ```
 3. Require and instantiate the Jobs singleton
 ```js
-const Jobs = require("jobs")({sql: executeSqlPromise}) // executeSqlPromise :: SqlString
+const Jobs = require("persist-jobs")({sql: executeSqlPromise}) // executeSqlPromise :: SqlString
 ```
 
 # Config Options

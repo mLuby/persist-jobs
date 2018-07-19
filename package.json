@@ -1,8 +1,8 @@
 {
-  "name": "jobs",
+  "name": "persist-jobs",
   "version": "1.0.0",
   "description": "Persistent (SQL) Job Scheduler for Node",
-  "main": "Jobs.js",
+  "main": "index.js",
   "scripts": {
     "test": "eslint --config .eslintrc.json *.js && nyc --reporter=lcov --reporter=text --check-coverage --lines 100 --functions 100 --branches 100 node test/test.js && nyc report --reporter=text-lcov | coveralls"
   },
@@ -10,7 +10,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mLuby/jobs.git"
+    "url": "git://github.com/mLuby/persist-jobs.git"
   },
   "devDependencies": {
     "coveralls": "^3.0.2",

@@ -1,6 +1,6 @@
 const tape = require("tape")
 const executeSql = require('./psql.js')
-const JobsPath = "../Jobs.js"
+const JobsPath = "../index.js"
 const table = "JobsTest"
 const intervalMs = 1000
 
