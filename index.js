@@ -12,7 +12,7 @@ module.exports = function Jobs ({executeSql, table, onError = console.error}) {
   config.executeSql = executeSql
   config.table = table
   config.onError = onError
-  return {clear, register, schedule, start, stop}
+  return {cancel, clear, list, register, schedule, start, stop}
 }
 
 function start ({intervalMs}) {
@@ -52,6 +52,16 @@ async function schedule (due_at, jobFunc, ...argsJson) {
 
 function clear () { // for testing only
   Object.keys(registeredJobs).forEach(key => delete registeredJobs[key])
+}
+
+async function cancel (jobId) {
+  /* istanbul ignore next */ process.env.DEBUG && console.log(`[Jobs] cancelling ${jobId}`)
+  return await config.executeSql(`DELETE FROM ${config.table} WHERE job_id = ${jobId};`)
+}
+
+async function list () {
+  /* istanbul ignore next */ process.env.DEBUG && console.log("[Jobs] listing all active jobs")
+  return await config.executeSql(`SELECT * FROM ${config.table} WHERE run_at IS NULL;`)
 }
 
 // HELPERS

@@ -167,6 +167,38 @@ tape("doesn't mark job complete if job not registered", async t => {
   }
 })
 
+tape("can list all active jobs", async t => {
+  t.plan(1)
+
+  const Jobs = require(JobsPath)({executeSql, table})
+  await executeSql(`DELETE FROM ${table};`)
+  Jobs.clear()
+  Jobs.register(now)
+  const job_id1 = await Jobs.schedule(now(), now, 1)
+  const job_id2 = await Jobs.schedule(now(), now, 2)
+
+  t.deepEqual(
+    await Jobs.list().then(rs => rs.map(r => Object.assign(r, {due_at: true}))),
+    [{job_id: job_id1, due_at: true, type: "now", args: "[1]", run_at: null}, {job_id: job_id2, due_at: true, type: "now", args: "[2]", run_at: null}], // eslint-disable-line sort-keys
+    "should list active jobs",
+  )
+})
+
+tape("can cancel a job (deleting it)", async t => {
+  t.plan(2)
+
+  const Jobs = require(JobsPath)({executeSql, table})
+  await executeSql(`DELETE FROM ${table};`)
+  Jobs.clear()
+  Jobs.register(now)
+  const job_id1 = await Jobs.schedule(now(), now, 1)
+  const job_id2 = await Jobs.schedule(now(), now, 2)
+
+  t.deepEqual(await Jobs.list().then(rs => rs.map(r => r.job_id)), [job_id1, job_id2], "both jobs exist")
+  await Jobs.cancel(job_id1)
+  t.deepEqual(await Jobs.list().then(rs => rs.map(r => r.job_id)), [job_id2], "cancelled job is deleted")
+})
+
 xtape("can configure job check interval", async t => {})
 
 xtape("can stop and restart Jobs (clears interval)", async t => {})
